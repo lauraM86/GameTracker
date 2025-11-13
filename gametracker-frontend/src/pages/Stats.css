@@ -1,0 +1,92 @@
+.stats-container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: white;
+  font-family: sans-serif;
+}
+
+.stats-container h1 {
+  font-size: 2rem;
+  color: #3b82f6;
+  margin-bottom: 1.5rem;
+}
+
+.stats-cards {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 12px;
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+}
+
+.stat-card h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+  color: #aaa;
+}
+
+
+.genre-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.genre-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.genre-name {
+  flex: 1;
+}
+
+.progress-bar {
+  flex: 3;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background-color: #3b82f6;
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+.genre-percent {
+  width: 40px;
+  text-align: right;
+}
+
+
+.app-container.light .stats-container {
+  color: #111;
+}
+
+.app-container.light .stat-card {
+  background-color: #e0e0e0;
+  color: #111;
+}
+
+.app-container.light .progress-bar {
+  background-color: #ccc;
+}
+
+.app-container.light .progress-fill {
+  background-color: #2563eb;
+}

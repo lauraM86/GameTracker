@@ -1,0 +1,112 @@
+.library-container {
+  flex: 1;
+  min-height: 100vh;
+  background-color: #131313;
+  color: white;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+  transition: background 0.3s, color 0.3s;
+}
+
+.library-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 2rem;
+}
+
+.library-header h1 {
+  font-size: 2rem;
+  color: #3b82f6;
+}
+
+
+.search-bar {
+  background-color: #1e1e1e;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  color: white;
+  width: 250px;       
+  max-width: 250px;
+  margin-left: auto; 
+  height: 28px; 
+  outline: none;
+  transition: all 0.3s ease, background 0.3s, color 0.3s;
+}
+
+.search-bar:focus {
+  background-color: #2a2a2a;
+  box-shadow: 0 0 5px #3b82f6;
+}
+
+
+.library-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1000px;
+}
+
+
+.no-results {
+  text-align: center;
+  width: 100%;
+  margin-top: 2rem;
+  color: #ccc;
+  font-size: 1rem;
+}
+
+
+@media (max-width: 768px) {
+  .library-container {
+    padding: 1.5rem;
+  }
+
+  .library-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .search-bar {
+    max-width: 100%;
+  }
+}
+
+
+.app-container.dark .library-container {
+  background-color: #131313;
+  color: white;
+}
+
+.app-container.light .library-container {
+  background-color: #f4f4f4;
+  color: #111;
+}
+
+.app-container.dark .search-bar {
+  background-color: #1e1e1e;
+  color: white;
+}
+
+.app-container.light .search-bar {
+  background-color: #e0e0e0;
+  color: #111;
+}
+
+.app-container.dark .library-grid .game-card {
+  background-color: #111;
+  color: white;
+}
+
+.app-container.light .library-grid .game-card {
+  background-color: #e0e0e0;
+  color: #111;
+}
