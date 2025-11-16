@@ -1,26 +1,65 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { getUserLibrary, getUserStats } from "../services/Api.js";
 import GameCard from "../components/GameCard.jsx";
-import "../styles/Dashboard.css";
+import "./Dashboard.css";
 
 function Dashboard({ darkMode }) {
+  const [libraryGames, setLibraryGames] = useState([]);
   const [stats, setStats] = useState(null);
-  const [completedGamesList, setCompletedGamesList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [featuredGame, setFeaturedGame] = useState(null);
+  const [achievements, setAchievements] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const statsRes = await axios.get("/api/users/stats");
-        const libraryRes = await axios.get("/api/users/library");
+        const userId = localStorage.getItem("userId");
+        if (!userId) return;
 
-        setStats(statsRes.data || {});
-        setCompletedGamesList(Array.isArray(libraryRes.data) ? libraryRes.data.slice(0, 3) : []);
+        const libraryData = await getUserLibrary(userId);
+        const statsData = await getUserStats(userId);
+
+        const games = libraryData || [];
+        setLibraryGames(games);
+        setStats(statsData || {});
+
+        const randomGame = games.length > 0
+          ? games[Math.floor(Math.random() * games.length)]
+          : null;
+
+        setFeaturedGame({
+          title: randomGame?.title || "Hollow Knight",
+          image: randomGame?.image || "https://via.placeholder.com/600x350?text=Hollow+Knight",
+          rating: randomGame?.rating || 4.8,
+          reviews: randomGame?.reviews || 1234,
+          genre: randomGame?.genre || "Aventura",
+          platform: randomGame?.platform || "PC"
+        });
+
+  
+     const achievementsList = [
+  {
+    title: "Maestro de la Biblioteca",
+    description: `Has completado ${2} juegos`,
+    icon: "🏆"
+  },
+  {
+    title: "Horas de Juego",
+    description: `Has jugado ${110} horas`,
+    icon: "⏱️"
+  },
+  {
+    title: "Calificación Promedio",
+    description: ` ${8.5.toFixed(1)} ⭐`,
+    icon: "🌟"
+  },
+];
+
+setAchievements(achievementsList);
+
+
       } catch (err) {
         console.error(err);
-        setError("Error cargando datos. Intenta recargar.");
       } finally {
         setLoading(false);
       }
@@ -29,50 +68,71 @@ function Dashboard({ darkMode }) {
     fetchData();
   }, []);
 
-  if (loading) return <p className="loading">Cargando datos...</p>;
-  if (error) return <p className="loading">{error}</p>;
+  if (loading) return <p className="loading">Cargando inicio...</p>;
 
   return (
     <div className={`dashboard-container ${darkMode ? "dark" : "light"}`}>
-      <h1>📊 Inicio</h1>
+      
+      <h1>🕹️ Inicio</h1>
 
-      <div className="stats-cards">
-        <div className="stat-card">
-          <h3>Juegos Completados</h3>
-          <p className="stat-number">{stats?.completedGames ?? 0}</p>
-        </div>
-        <div className="stat-card">
-          <h3>Horas Jugadas</h3>
-          <p className="stat-number">{stats?.hoursPlayed ?? 0}</p>
-        </div>
-        <div className="stat-card">
-          <h3>Calificación Promedio</h3>
-          <p className="stat-number">{(stats?.averageRating ?? 0).toFixed(1)} ⭐</p>
-        </div>
-      </div>
+      {/* --- Juego destacado --- */}
+      {featuredGame && (
+        <section className="featured-game-section">
+          <img
+            src={featuredGame.image}
+            alt={featuredGame.title}
+            className="featured-game-img"
+          />
+          <div className="featured-game-info">
+            <h2>{featuredGame.title}</h2>
 
-      <h2>🎮 Juegos Completados</h2>
-      <div className="completed-games-grid">
-        {completedGamesList.length > 0 ? (
-          completedGamesList.map((game) =>
-            game ? <GameCard key={game._id || game.id} game={game} darkMode={darkMode} /> : null
-          )
-        ) : (
-          <p>No hay juegos completados.</p>
-        )}
-      </div>
-
-      <h3>Categorías de Juegos</h3>
-      <div className="categories-bar">
-        {(stats?.categories ?? []).map((cat) => (
-          <div key={cat.name} className="category">
-            <span>{cat.name}</span>
-            <div className="bar-background">
-              <div className="bar-fill" style={{ width: `${cat.percentage ?? 0}%` }}></div>
+            {/* Estrellas */}
+            <div className="featured-rating">
+              <span className="stars">{"⭐".repeat(Math.round(featuredGame.rating))}</span>
+          
             </div>
+
+            {/* Género */}
+            <p className="featured-genre">
+              <strong>Género:</strong> {featuredGame.genre}
+            </p>
+
+            {/* Plataforma */}
+            <p className="featured-platform">
+              <strong>Plataforma:</strong> {featuredGame.platform}
+            </p>
           </div>
-        ))}
-      </div>
+        </section>
+      )}
+
+      {/* --- Biblioteca horizontal --- */}
+      <section className="library-section">
+        <h2>📚 Mi Biblioteca</h2>
+        <div className="library-scroll-horizontal">
+          {libraryGames.length > 0 ? (
+            libraryGames.map((game) =>
+              game ? <GameCard key={game._id} game={game} darkMode={darkMode} /> : null
+            )
+          ) : (
+            <p>No tienes juegos en tu biblioteca 😢</p>
+          )}
+        </div>
+      </section>
+
+      {/* --- Logros --- */}
+      <section className="achievements-section">
+        <h2>🏅 Mis Logros</h2>
+        <div className="achievements-cards">
+          {achievements.map((a, index) => (
+            <div key={index} className="achievement-card">
+              <span className="achievement-icon">{a.icon}</span>
+              <h3>{a.title}</h3>
+              <p>{a.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
     </div>
   );
 }
