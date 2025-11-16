@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
 
-const reviewSchema = new mongoose.Schema({
-  game: { type: mongoose.Schema.Types.ObjectId, ref: "Game", required: true },
-  user: { type: String, required: true },
-  comment: String,
-  rating: { type: Number, min: 1, max: 5, required: true },
-  date: { type: Date, default: Date.now },
-});
+const reviewSchema = new mongoose.Schema(
+  {
+    gameId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Game" },
 
-export const Review = mongoose.model("Review", reviewSchema);
+    userId: { type: String, required: true },
+
+    comment: { type: String, required: true },
+    rating: { type: Number, min: 1, max: 10, required: true }
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("Review", reviewSchema);
