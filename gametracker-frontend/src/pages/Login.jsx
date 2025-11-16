@@ -4,14 +4,16 @@ import "../styles/Auth.css";
 
 export default function Login({ setToken, setUsername }) {
   const [isRegister, setIsRegister] = useState(false);
-  const [username, setUser] = useState("");
+  const [username, setLocalUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true); 
 
     try {
       const endpoint = isRegister
@@ -19,26 +21,39 @@ export default function Login({ setToken, setUsername }) {
         : "http://localhost:4000/api/auth/login";
 
       const payload = isRegister
-        ? { username, email, password }
-        : { email, password };
+        ? { username, email, password } 
+        : { email, password }; 
 
       const res = await axios.post(endpoint, payload);
 
-      if (!isRegister) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("username", res.data.username);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("username", res.data.username);
+      localStorage.setItem("userId", res.data.userId); 
 
+      if (!isRegister) {
         setToken(res.data.token);
         setUsername(res.data.username);
-      } else {
-        alert("✅ Registro exitoso. Ahora inicia sesión.");
-        setIsRegister(false);
-        setUser("");
-        setEmail("");
-        setPassword("");
       }
+
+      if (isRegister) {
+        alert("✅ Registro exitoso. Bienvenido!");
+      }
+
+      setLocalUsername(""); 
+      setEmail("");
+      setPassword("");
+      setIsRegister(false); 
+
     } catch (err) {
-      setError(err.response?.data?.message || "❌ Error en la autenticación.");
+      if (err.response?.status === 401) {
+        setError("❌ Credenciales inválidas. Verifica email y contraseña.");
+      } else if (err.response?.status === 409) {
+        setError("❌ Usuario ya existe. Inicia sesión.");
+      } else {
+        setError(err.response?.data?.message || "❌ Error en la autenticación. Intenta de nuevo.");
+      }
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -55,7 +70,7 @@ export default function Login({ setToken, setUsername }) {
               type="text"
               placeholder="Nombre de usuario"
               value={username}
-              onChange={(e) => setUser(e.target.value)}
+              onChange={(e) => setLocalUsername(e.target.value)} // 🔥 Renombrado setter
               required
             />
           )}
@@ -74,8 +89,8 @@ export default function Login({ setToken, setUsername }) {
             required
           />
 
-          <button type="submit">
-            {isRegister ? "Registrarse" : "Iniciar sesión"}
+          <button type="submit" disabled={loading}>
+            {loading ? "Cargando..." : (isRegister ? "Registrarse" : "Iniciar sesión")}
           </button>
         </form>
 
@@ -88,7 +103,10 @@ export default function Login({ setToken, setUsername }) {
             onClick={() => {
               setIsRegister(!isRegister);
               setError("");
+              setLocalUsername(""); 
             }}
+            role="button"
+            tabIndex={0}
           >
             {isRegister ? "Inicia sesión" : "Regístrate"}
           </span>
