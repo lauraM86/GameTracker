@@ -1,7 +1,4 @@
-
-
-const BASE_URL = "http://localhost:4000/api"; 
-
+const BASE_URL = "http://localhost:4000/api";
 
 export const getGames = async () => {
   try {
@@ -14,25 +11,22 @@ export const getGames = async () => {
   }
 };
 
-export const getGameById = async (id) => {
+export const getUserLibrary = async (userId) => {
   try {
-    const res = await fetch(`${BASE_URL}/games/${id}`);
-    if (!res.ok) throw new Error("Juego no encontrado");
-    return await res.json();
+    const res = await fetch(`${BASE_URL}/library?userId=${userId}`);
+    if (!res.ok) throw new Error("Error al obtener biblioteca");
+    const data = await res.json();
+    return Array.isArray(data.games) ? data.games : [];
   } catch (err) {
     console.error(err);
-    return null;
+    return [];
   }
 };
 
-export const getUserLibrary = async (token) => {
+export const getUserStats = async (userId) => {
   try {
-    const res = await fetch(`${BASE_URL}/library`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (!res.ok) throw new Error("Error al obtener biblioteca");
+    const res = await fetch(`${BASE_URL}/stats/${userId}`);
+    if (!res.ok) throw new Error("Error al obtener estadísticas");
     return await res.json();
   } catch (err) {
     console.error(err);
@@ -40,57 +34,47 @@ export const getUserLibrary = async (token) => {
   }
 };
 
-
-export const getUserStats = async (token) => {
+export const updateStats = async (userId, gameId, statsData) => {
   try {
-    const res = await fetch(`${BASE_URL}/stats`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    if (!userId || !gameId) throw new Error("Faltan userId o gameId");
+
+    const body = {
+      hoursPlayed: Number(statsData.hoursPlayed) || 0,
+      difficulty: statsData.difficulty || "Fácil",
+      completed: !!statsData.completed,
+      progress: Number(statsData.progress) || 0,
+    };
+
+    const res = await fetch(`${BASE_URL}/stats/${userId}/${gameId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
     });
-    if (!res.ok) throw new Error("Error al obtener estadísticas");
+
+    if (!res.ok) throw new Error(await res.text());
     return await res.json();
   } catch (err) {
-    console.error(err);
-    return {
-      completedGames: 0,
-      hoursPlayed: 0,
-      averageRating: 0,
-      categories: [],
-    };
-  }
-};
-
-
-export const loginUser = async (email, password) => {
-  try {
-    const res = await fetch(`${BASE_URL}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) throw new Error("Credenciales inválidas");
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.error(err);
+    console.error("updateStats error:", err);
     return null;
   }
 };
 
-
-export const registerUser = async (name, email, password) => {
+export const deleteGameFromLibrary = async (userId, gameId) => {
   try {
-    const res = await fetch(`${BASE_URL}/auth/register`, {
-      method: "POST",
+    const res = await fetch(`${BASE_URL}/library/remove`, {
+      method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ userId, gameId }),
     });
-    if (!res.ok) throw new Error("Error al registrar usuario");
-    const data = await res.json();
-    return data;
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Error al eliminar juego de la biblioteca");
+    }
+
+    return true;
   } catch (err) {
-    console.error(err);
-    return null;
+    console.error("deleteGameFromLibrary error:", err);
+    return false;
   }
 };
