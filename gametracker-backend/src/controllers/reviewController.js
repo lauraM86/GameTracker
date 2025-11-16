@@ -1,31 +1,68 @@
-import { Review } from "../models/Review.js";
-import { Game } from "../models/Game.js";
-
+import Review from "../models/review.js";
 
 export const getReviews = async (req, res) => {
   try {
-    const reviews = await Review.find().populate("game");
+    const { gameId } = req.query;
+
+    let reviews = [];
+
+    if (gameId) {
+      reviews = await Review.find({ gameId }).sort({ createdAt: -1 });
+    } else {
+      reviews = await Review.find();
+    }
+
     res.json(reviews);
-  } catch (error) {
-    res.status(500).json({ message: "Error al obtener reseñas" });
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching reviews" });
   }
 };
 
-
 export const createReview = async (req, res) => {
   try {
-    const review = new Review(req.body);
-    await review.save();
+    const { gameId, userId, comment, rating } = req.body;
 
+    if (!gameId || !userId || !comment || !rating) {
+      return res.status(400).json({ error: "Missing fields" });
+    }
 
-    const game = await Game.findById(review.game);
-    const reviews = await Review.find({ game: game._id });
-    const avg = reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length;
-    game.averageRating = avg;
-    await game.save();
+    const newReview = new Review({
+      gameId,
+      userId,
+      comment,
+      rating
+    });
 
-    res.status(201).json(review);
-  } catch (error) {
-    res.status(400).json({ message: "Error al crear la reseña" });
+    await newReview.save();
+
+    res.json(newReview);
+  } catch (err) {
+    res.status(500).json({ error: "Error creating review" });
+  }
+};
+
+export const updateReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { comment, rating } = req.body;
+
+    const updated = await Review.findByIdAndUpdate(
+      id,
+      { comment, rating },
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: "Error updating review" });
+  }
+};
+
+export const deleteReview = async (req, res) => {
+  try {
+    await Review.findByIdAndDelete(req.params.id);
+    res.json({ message: "Review deleted" });
+  } catch (err) {
+    res.status(500).json({ error: "Error deleting review" });
   }
 };

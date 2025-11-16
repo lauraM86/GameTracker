@@ -11,7 +11,12 @@ export const registerUser = async (req, res) => {
     const user = await User.create({ username, email, password });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-    res.status(201).json({ token, username: user.username, email: user.email });
+    res.status(201).json({ 
+      token, 
+      username: user.username, 
+      email: user.email, 
+      userId: user._id // 🔥 Añadido userId
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -29,7 +34,12 @@ export const loginUser = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-    res.status(200).json({ token, username: user.username, email: user.email });
+    res.status(200).json({ 
+      token, 
+      username: user.username, 
+      email: user.email, 
+      userId: user._id 
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
