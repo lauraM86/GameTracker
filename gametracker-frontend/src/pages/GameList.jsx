@@ -14,12 +14,12 @@ function GameList({ darkMode }) {
     const fetchGames = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("/api/games"); // Conecta a tu backend real
+        const res = await axios.get("http://localhost:4000/api/games");
         const data = Array.isArray(res.data) ? res.data : [];
         setGames(data);
         setFilteredGames(data);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetch:", err);
         setError("Error cargando juegos.");
       } finally {
         setLoading(false);
@@ -27,6 +27,20 @@ function GameList({ darkMode }) {
     };
     fetchGames();
   }, []);
+
+  const handleStartGame = async (gameId) => {
+    const userId = localStorage.getItem("userId");
+
+    try {
+      await axios.post("http://localhost:4000/api/library/add", {
+        userId,
+        gameId,
+      });
+      alert("Juego añadido a tu biblioteca.");
+    } catch (error) {
+      alert("Este juego ya está en tu biblioteca.");
+    }
+  };
 
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
@@ -40,16 +54,18 @@ function GameList({ darkMode }) {
   if (error) return <p className="loading">{error}</p>;
 
   return (
-    <div className={`game-list-container ${darkMode ? "dark" : "light"}`}>
+    <main className={`main-content ${darkMode ? "dark" : "light"}`}>
+      <h1 className="library-title">🎮 Game Library</h1>
       <header className="game-list-header">
-        <h1 className="title">🎮 Game Library</h1>
-        <input
-          type="text"
-          placeholder="Buscar juego 🔍..."
-          value={search}
-          onChange={handleSearch}
-          className="search-bar"
-        />
+        <div className="header-search-row">
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Buscar juego ..."
+            value={search}
+            onChange={handleSearch}
+          />
+        </div>
       </header>
 
       <div className="filters">
@@ -62,7 +78,15 @@ function GameList({ darkMode }) {
       <section className="games-grid">
         {filteredGames.length > 0 ? (
           filteredGames.map((game) =>
-            game ? <GameCard key={game._id || game.id} game={game} darkMode={darkMode} /> : null
+            game ? (
+              <GameCard
+                key={game._id}
+                game={game}
+                darkMode={darkMode}
+                onStart={handleStartGame}
+                actionType="add"
+              />
+            ) : null
           )
         ) : (
           <div className="no-results-container">
@@ -70,7 +94,7 @@ function GameList({ darkMode }) {
           </div>
         )}
       </section>
-    </div>
+    </main>
   );
 }
 
