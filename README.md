@@ -16,13 +16,13 @@
 
 ---
 
-## 🧱 Tecnologías utilizadas
-
 ### 🖥️ Frontend
 - React.js (Vite)
 - Axios
 - Lucide Icons 🎮
 - CSS (modo oscuro personalizado)
+
+---
 
 ### ⚙️ Backend
 - Node.js + Express
@@ -30,4 +30,62 @@
 - JWT (JSON Web Token)
 - bcryptjs
 
+---
 
+### 📦 Instalación
+- Clona el repositorio:
+- git clone https://github.com/tuusuario/GameTracker.git cd GameTracker
+- Backend
+- cd gametracker-backend npm install
+- Frontend
+- cd gametracker-frontend npm install
+
+---
+
+### ⚙️ Configuración de variables de entorno
+
+- Backend (.env)
+- MONGO_URI=mongodb://localhost:27017/gametracker
+- JWT_SECRET=tu_secreto_seguro PORT=4000
+- Frontend (.env)
+- VITE_API_URL=http://localhost:4000
+
+### ▶️ Cómo ejecutar el proyecto
+- Backend
+- cd gametracker-backend npm run dev
+- Frontend
+- cd gametracker-frontend npm run dev
+
+### 🧪 Documentación de la API
+
+## 📂 Autenticación
+- POST /auth/register
+- POST /auth/login
+
+## 🕹️ Juegos
+- GET /games
+- GET /games/:id
+- POST /games/add
+- DELETE /games/:id
+
+## 🔍 Reseñas
+- POST /reviews/:gameId
+
+## 🧮 Estadísticas
+- GET /stats/:userId
+- PUT /stats/update/:gameId
+
+---
+
+### 🗂️ Estructura del proyecto
+- gametracker-backend/ controllers/ models/ routes/ index.js
+- gametracker-frontend/ components/ pages/ services/ context/ App.jsx
+
+---
+
+### 👤 Autor
+
+- Nombre: Laura Bermudez 
+- GitHub: https://github.com/lauraM86/
+
+---
