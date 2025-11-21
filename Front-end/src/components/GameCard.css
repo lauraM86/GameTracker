@@ -116,3 +116,37 @@
   background-color: #b91c1c;
   transform: scale(1.1);
 }
+
+/* === GAME CARD - MODO CLARO ADAPTADO === */
+
+.game-card.light {
+  background-color: #eaeaea; /* Igual que .sidebar en modo claro */
+  color: #111;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1); /* Misma sombra suave del dashboard */
+  border: 1px solid #d3d3d3; /* Borde elegante suave */
+}
+
+/* Título en modo claro */
+.game-card.light .game-info h3 {
+  color: #111; 
+}
+
+/* Texto secundario */
+.game-card.light .game-info p {
+  color: #555; /* Igual a .nav-item.light */
+  opacity: 1;
+}
+
+/* Línea separadora */
+.game-card.light .info-row {
+  border-top: 1px solid rgba(0, 0, 0, 0.15); /* Gris suave */
+}
+
+/* Botones se mantienen igual (ya van con tus colores corporativos) */
+.game-card.light .start-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+.game-card.light .start-btn:hover {
+  background-color: #2563eb;
+} 

@@ -85,7 +85,7 @@
 
 ### 👤 Autor
 
-- Nombre: Laura Bermudez 
+- Nombre: Laura Benavides & keren Arrieta 
 - GitHub: https://github.com/lauraM86/
 
 ---

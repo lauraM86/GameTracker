@@ -115,13 +115,13 @@
 }
 
 
-.dashboard-container.dark {
+/*.dashboard-container.dark {
   background-color: #131313;
   color: #f5f5f5;
 }
 
 .dashboard-container.light {
-  background-color: #f4f4f4;
+  background-color: #ffffff;
   color: #111;
 }
 
@@ -135,4 +135,51 @@
 .dashboard-container.dark .achievement-card {
   background-color: #1f1f1f;
   color: white;
+}
+
+/* === DASHBOARD MODO CLARO (adaptado al estilo general) === */
+
+.dashboard-container.light {
+  background-color: #f4f4f4; /* Igual al app-container.light */
+  color: #111;
+}
+
+/* Tarjetas del dashboard */
+.dashboard-container.light .featured-game-section,
+.dashboard-container.light .achievement-card {
+  background-color: #eaeaea;       /* Igual a la sidebar del modo claro */
+  color: #111;
+  border-radius: 12px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1); /* Igual estilo de sombras */
+  border: 1px solid #d3d3d3;       /* Suave, estilo minimalista */
+}
+
+/* Título destacado */
+.dashboard-container.light .featured-game-info h2 {
+  color: #d4a000; /* Dorado suave, ya lo traías */
+}
+
+/* Texto dentro de tarjetas */
+.dashboard-container.light .featured-game-info p {
+  color: #555; /* Coincide con .nav-item en modo claro */
+}
+
+/* Reseñas */
+.dashboard-container.light .featured-rating .reviews {
+  color: #666;
+}
+
+/* Imagen destacada */
+.dashboard-container.light .featured-game-img {
+  border-radius: 12px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.12);
+}
+
+/* Scrollbars igualados al modo claro general */
+.dashboard-container.light ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-container.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
 }

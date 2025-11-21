@@ -216,6 +216,96 @@
   background-color: #3b82f6;
 }
 
+/* === MODO CLARO UNIFICADO === */
+
+.stats-container.light {
+  color: #111;
+  background-color: #f4f4f4; /* Igual que app-container.light */
+}
+
+/* Tarjetas del listado */
+.stats-container.light .game-stat-card {
+  background-color: #eaeaea; /* Igual a sidebar light */
+  border: 1px solid #d3d3d3;
+  border-radius: 12px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Títulos dentro de tarjeta */
+.stats-container.light .game-stat-info h2 {
+  color: #3b82f6; /* Mantiene tu azul principal */
+}
+
+/* Texto secundario */
+.stats-container.light .game-stat-info p {
+  color: #555;
+}
+
+/* Badges (estadísticas pequeñas) */
+.stats-container.light .stats-details span {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+/* Etiquetas y porcentaje */
+.stats-container.light .progress-label,
+.stats-container.light .progress-percent {
+  color: #555;
+}
+
+/* Barra de progreso */
+.stats-container.light .progress-bar {
+  background-color: #cfcfcf;  /* Gris mejor balanceado */
+}
+
+.stats-container.light .progress-fill {
+  background-color: #3b82f6; /* Azul principal */
+}
+
+/* Imagen del juego */
+.stats-container.light .game-stat-image {
+  border: 2px solid #d0d0d0;
+}
+
+/* Botón editar */
+.stats-container.light .edit-stats-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.stats-container.light .edit-stats-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Modal en modo claro */
+.stats-container.light .modal {
+  background-color: #eaeaea;
+  color: #111;
+  border: 1px solid #d3d3d3;
+}
+
+.stats-container.light .modal input,
+.stats-container.light .modal select {
+  background-color: #f9f9f9;
+  color: #111;
+  border: 1px solid #ccc;
+}
+
+.stats-container.light .modal-buttons .cancel {
+  background-color: #bbb;
+  color: #222;
+}
+
+.stats-container.light .modal-buttons .cancel:hover {
+  background-color: #999;
+}
+
+.stats-container.light .no-games {
+  color: #666;
+}
+
+
+/*
 .stats-container.light {
   color: #111;
 }
@@ -237,7 +327,7 @@
 .stats-container.light .progress-fill {
   background-color: #2563eb;
 }
-
+*/
 @media (max-width: 768px) {
   .game-stat-card {
     flex-direction: column;
